@@ -13,7 +13,7 @@ from datetime import datetime
 # ALL 12 ENTRIES' PICKS (keyed by game ID)
 # =====================================================
 PICKS = {
-    "Bird Bath": {
+    "The Bird Bath": {
         "FF1":"UMBC","FF2":"Lehigh","FF3":"Texas","FF4":"Miami (OH)",
         "E1":"Duke","E2":"TCU","E3":"St. John's","E4":"Cal Baptist",
         "E5":"South Florida","E6":"Michigan State","E7":"UCLA","E8":"UConn",
@@ -268,7 +268,7 @@ PICKS = {
 }
 
 ENTRY_META = {
-    "Bird Bath":       {"tool": "Claude", "champ": "Arizona", "url": "https://first100.io"},
+    "The Bird Bath":   {"tool": "Claude", "champ": "Arizona", "url": "https://first100.io"},
     "Open Vet":        {"tool": "Open Vet AI", "champ": "Duke", "url": "https://openvet.ai"},
     "Talkatoo":        {"tool": "Talkatoo", "champ": "Houston", "url": "https://talkatoo.com"},
     "PrimVeterinary":  {"tool": "PrimVeterinary AI", "champ": "UConn", "url": "https://primveterinary.com"},
