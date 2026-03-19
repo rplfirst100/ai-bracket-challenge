@@ -25,8 +25,6 @@
     -webkit-font-smoothing: antialiased;
   }
   .container { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
-
-  /* Header */
   .header { text-align: center; margin-bottom: 32px; }
   .header-img { width: 100%; max-width: 960px; border-radius: 12px; margin-bottom: 16px; }
   .header .sub { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
@@ -34,49 +32,38 @@
   .header .sub a:hover { text-decoration: underline; }
   .badge { display: inline-block; background: var(--card); border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; font-size: 12px; color: var(--muted); font-weight: 500; }
   .badge .live { color: var(--green); }
-
-  /* Stats row */
   .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
-  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; }
   .stat .num { font-size: 24px; font-weight: 700; color: var(--accent); }
   .stat .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
-
-  /* Leaderboard table */
-  .board { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .board { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
   .board-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
   .board-header h2 { font-size: 16px; font-weight: 600; }
-  .board-header .toggle { font-size: 12px; color: var(--muted); cursor: pointer; background: none; border: 1px solid var(--border); padding: 4px 10px; border-radius: 6px; color: var(--text); }
+  .board-header .toggle { font-size: 12px; cursor: pointer; background: none; border: 1px solid var(--border); padding: 4px 10px; border-radius: 6px; color: var(--text); }
   .board-header .toggle:hover { border-color: var(--muted); }
-
   table { width: 100%; border-collapse: collapse; }
   thead th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); font-weight: 600; padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
   thead th.num { text-align: center; }
   tbody td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
   tbody tr:last-child td { border-bottom: none; }
   tbody tr:hover { background: rgba(255,255,255,0.04); }
-
   .rank { font-weight: 700; color: var(--muted); width: 36px; text-align: center; }
   .rank-1 { color: var(--accent); }
   .rank-2 { color: #c0c0c0; }
   .rank-3 { color: #cd7f32; }
-
   .entry-name { font-weight: 600; }
   .entry-name a { color: var(--text); text-decoration: none; }
   .entry-name a:hover { color: var(--accent); }
   .entry-tool { font-size: 12px; color: var(--muted); }
-
   .champ { font-size: 12px; color: var(--muted); }
   .champ-alive { color: var(--green); }
   .champ-dead { color: var(--red); text-decoration: line-through; }
-
   .pts { font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
   .pts-total { font-size: 18px; color: var(--accent); }
   .pts-round { font-size: 13px; color: var(--muted); text-align: center; }
   .round-cols { display: none; }
   .round-cols.show { display: table-cell; }
-
-  /* Recent results */
-  .results { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .results { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
   .results-header { padding: 16px 20px; border-bottom: 1px solid var(--border); }
   .results-header h2 { font-size: 16px; font-weight: 600; }
   .result-row { display: flex; align-items: center; padding: 10px 20px; border-bottom: 1px solid var(--border); font-size: 14px; }
@@ -87,15 +74,10 @@
   .result-round { font-size: 11px; color: var(--muted); background: var(--bg); padding: 2px 8px; border-radius: 4px; margin-left: auto; }
   .result-correct { font-size: 12px; color: var(--green); margin-left: 12px; white-space: nowrap; }
   .no-results { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 14px; }
-
-  /* Footer */
   .footer { text-align: center; color: var(--muted); font-size: 12px; padding: 20px 0; }
   .footer a { color: var(--accent); text-decoration: none; }
-
-  /* Mobile */
   @media (max-width: 640px) {
     .stats { grid-template-columns: repeat(2, 1fr); }
-    .header h1 { font-size: 22px; }
     table { font-size: 13px; }
     thead th, tbody td { padding: 8px 6px; }
     .hide-mobile { display: none; }
@@ -104,20 +86,17 @@
 </head>
 <body>
 <div class="container">
-
 <div class="header">
   <img src="header.png" alt="The Bird Bath presents: Veterinary AI Bracket Challenge" class="header-img">
   <div class="sub">12 vet AI companies. 67 games. One bracket to rule them all.<br>A <a href="https://thebirdbath.io" target="_blank">Bird Bath</a> production.</div>
-  <div class="badge"><span class="live" id="status-dot">&#9679;</span> <span id="status-text">Tournament starts March 19</span></div>
+  <div class="badge"><span class="live">&#9679;</span> 2 of 67 games complete</div>
 </div>
-
 <div class="stats">
-  <div class="stat"><div class="num" id="games-played">0</div><div class="label">Games Played</div></div>
-  <div class="stat"><div class="num" id="games-left">67</div><div class="label">Games Left</div></div>
-  <div class="stat"><div class="num" id="leader-name">--</div><div class="label">Current Leader</div></div>
-  <div class="stat"><div class="num" id="max-pts">192</div><div class="label">Max Possible</div></div>
+  <div class="stat"><div class="num">2</div><div class="label">Games Played</div></div>
+  <div class="stat"><div class="num">65</div><div class="label">Games Left</div></div>
+  <div class="stat"><div class="num" style="font-size:16px">Digital Empathy</div><div class="label">Current Leader</div></div>
+  <div class="stat"><div class="num">192</div><div class="label">Max Possible</div></div>
 </div>
-
 <div class="board">
   <div class="board-header">
     <h2>Leaderboard</h2>
@@ -139,146 +118,167 @@
         <th class="num round-cols">Ship</th>
       </tr>
     </thead>
-    <tbody id="leaderboard-body"></tbody>
+    <tbody><tr>
+      <td class="rank rank-1">1</td>
+      <td><div class="entry-name"><a href="https://digitalempathyvet.com" target="_blank">Digital Empathy</a></div><div class="entry-tool">Claude + ChatGPT</div></td>
+      <td><span class="champ champ-alive">Arizona</span></td>
+      <td class="pts pts-total">2</td>
+      <td class="pts-round round-cols">2</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+    </tr><tr>
+      <td class="rank rank-1">1</td>
+      <td><div class="entry-name"><a href="https://happydoc.ai" target="_blank">HappyDoc</a></div><div class="entry-tool">HappyInsights</div></td>
+      <td><span class="champ champ-alive">Arizona</span></td>
+      <td class="pts pts-total">2</td>
+      <td class="pts-round round-cols">2</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+    </tr><tr>
+      <td class="rank rank-1">1</td>
+      <td><div class="entry-name"><a href="https://vetgeni.com" target="_blank">VetGeni</a></div><div class="entry-tool">VetGeni AI</div></td>
+      <td><span class="champ champ-alive">Houston</span></td>
+      <td class="pts pts-total">2</td>
+      <td class="pts-round round-cols">2</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+    </tr><tr>
+      <td class="rank ">4</td>
+      <td><div class="entry-name"><a href="https://openvet.ai" target="_blank">Open Vet</a></div><div class="entry-tool">Open Vet AI</div></td>
+      <td><span class="champ champ-alive">Duke</span></td>
+      <td class="pts pts-total">1</td>
+      <td class="pts-round round-cols">1</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+    </tr><tr>
+      <td class="rank ">4</td>
+      <td><div class="entry-name"><a href="https://otto.vet" target="_blank">Otto</a></div><div class="entry-tool">Otto AI</div></td>
+      <td><span class="champ champ-alive">Houston</span></td>
+      <td class="pts pts-total">1</td>
+      <td class="pts-round round-cols">1</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+    </tr><tr>
+      <td class="rank ">4</td>
+      <td><div class="entry-name"><a href="https://talkatoo.com" target="_blank">Talkatoo</a></div><div class="entry-tool">Talkatoo</div></td>
+      <td><span class="champ champ-alive">Houston</span></td>
+      <td class="pts pts-total">1</td>
+      <td class="pts-round round-cols">1</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+    </tr><tr>
+      <td class="rank ">4</td>
+      <td><div class="entry-name"><a href="https://thebirdbath.io" target="_blank">The Bird Bath</a></div><div class="entry-tool">Claude</div></td>
+      <td><span class="champ champ-alive">Arizona</span></td>
+      <td class="pts pts-total">1</td>
+      <td class="pts-round round-cols">1</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+    </tr><tr>
+      <td class="rank ">4</td>
+      <td><div class="entry-name"><a href="https://vetrec.io" target="_blank">VetRec</a></div><div class="entry-tool">VetRec AI</div></td>
+      <td><span class="champ champ-alive">Houston</span></td>
+      <td class="pts pts-total">1</td>
+      <td class="pts-round round-cols">1</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+    </tr><tr>
+      <td class="rank ">4</td>
+      <td><div class="entry-name"><a href="https://vetsoap.ai" target="_blank">VetSOAP</a></div><div class="entry-tool">VetSOAP AI</div></td>
+      <td><span class="champ champ-alive">Houston</span></td>
+      <td class="pts pts-total">1</td>
+      <td class="pts-round round-cols">1</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+    </tr><tr>
+      <td class="rank ">10</td>
+      <td><div class="entry-name"><a href="https://primveterinary.com" target="_blank">PrimVeterinary</a></div><div class="entry-tool">PrimVeterinary AI</div></td>
+      <td><span class="champ champ-alive">UConn</span></td>
+      <td class="pts pts-total">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+    </tr><tr>
+      <td class="rank ">10</td>
+      <td><div class="entry-name"><a href="https://scopehealth.com" target="_blank">Scope Health</a></div><div class="entry-tool">Scope Health AI</div></td>
+      <td><span class="champ champ-alive">Duke</span></td>
+      <td class="pts pts-total">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+    </tr><tr>
+      <td class="rank ">10</td>
+      <td><div class="entry-name"><a href="https://scribvet.com" target="_blank">ScribVet</a></div><div class="entry-tool">ScribVet AI</div></td>
+      <td><span class="champ champ-alive">Duke</span></td>
+      <td class="pts pts-total">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+      <td class="pts-round round-cols">0</td>
+    </tr></tbody>
   </table>
   </div>
 </div>
-
 <div class="results">
   <div class="results-header"><h2>Recent Results</h2></div>
-  <div id="results-list">
-    <div class="no-results">No games played yet. First tip-off March 19.</div>
-  </div>
+  <div><div class="result-row">
+        <span class="result-winner"><span class="result-seed">(11)</span>Texas</span>
+        <span class="result-loser">def. <span class="result-seed">(11)</span>NC State</span>
+        <span class="result-round">FF</span>
+        <span class="result-correct">8/12 correct</span>
+      </div><div class="result-row">
+        <span class="result-winner"><span class="result-seed">(16)</span>Howard</span>
+        <span class="result-loser">def. <span class="result-seed">(16)</span>UMBC</span>
+        <span class="result-round">FF</span>
+        <span class="result-correct">4/12 correct</span>
+      </div></div>
 </div>
-
 <div class="footer">
-  Updated <span id="last-updated">March 18, 2026</span> &middot; <a href="https://thebirdbath.io" target="_blank">The Bird Bath</a> &middot; <a href="https://first100.io" target="_blank">First 100</a>
+  Updated March 19, 2026 at 06:13 AM &middot; <a href="https://thebirdbath.io" target="_blank">The Bird Bath</a> &middot; <a href="https://first100.io" target="_blank">First 100</a>
 </div>
-
 </div>
-
 <script>
-// =====================================================
-// DATA - Update this section as games are played
-// =====================================================
-const LAST_UPDATED = "March 18, 2026";
-
-// Entry data: [name, company, tool, champion, url, scores by round]
-// Scores: [r64, r32, s16, e8, ff, chip, total]
-const ENTRIES = [
-  ["The Bird Bath", "First 100", "Claude", "Arizona", "https://thebirdbath.io", [0,0,0,0,0,0,0]],
-  ["Open Vet", "Open Vet", "Open Vet AI", "Duke", "https://openvet.ai", [0,0,0,0,0,0,0]],
-  ["Talkatoo", "Talkatoo", "Talkatoo", "Houston", "https://talkatoo.com", [0,0,0,0,0,0,0]],
-  ["PrimVeterinary", "PrimVeterinary", "PrimVeterinary AI", "UConn", "https://primveterinary.com", [0,0,0,0,0,0,0]],
-  ["VetGeni", "VetGeni", "VetGeni AI", "Houston", "https://vetgeni.com", [0,0,0,0,0,0,0]],
-  ["ScribVet", "ScribVet", "ScribVet AI", "Duke", "https://scribvet.com", [0,0,0,0,0,0,0]],
-  ["Otto", "Otto", "Otto AI", "Houston", "https://otto.vet", [0,0,0,0,0,0,0]],
-  ["Scope Health", "Scope Health", "Scope Health AI", "Duke", "https://scopehealth.com", [0,0,0,0,0,0,0]],
-  ["VetRec", "VetRec", "VetRec AI", "Houston", "https://vetrec.io", [0,0,0,0,0,0,0]],
-  ["VetSOAP", "VetSOAP", "VetSOAP AI", "Houston", "https://vetsoap.ai", [0,0,0,0,0,0,0]],
-  ["Digital Empathy", "Digital Empathy", "Claude + ChatGPT", "Arizona", "https://digitalempathyvet.com", [0,0,0,0,0,0,0]],
-  ["HappyDoc", "HappyDoc", "HappyInsights", "Arizona", "https://happydoc.ai", [0,0,0,0,0,0,0]],
-];
-
-// Completed games: [matchup_label, winner, loser, round_label, winner_seed, loser_seed]
-// Add results here as games finish
-const RESULTS = [
-  // Example: ["Duke vs Siena", "Duke", "Siena", "R64", "1", "16"],
-];
-
-// Champions still alive (set to false when eliminated)
-const CHAMP_STATUS = {
-  "Arizona": true,
-  "Duke": true,
-  "Houston": true,
-  "UConn": true,
-};
-
-// =====================================================
-// RENDER
-// =====================================================
-function render() {
-  // Sort entries by total score desc, then by name
-  const sorted = [...ENTRIES].sort((a, b) => {
-    const diff = b[5][6] - a[5][6];
-    return diff !== 0 ? diff : a[0].localeCompare(b[0]);
-  });
-
-  // Assign ranks
-  let ranks = [];
-  sorted.forEach((e, i) => {
-    if (i === 0 || e[5][6] < sorted[i-1][5][6]) {
-      ranks.push(i + 1);
-    } else {
-      ranks.push(ranks[i-1]);
-    }
-  });
-
-  const tbody = document.getElementById('leaderboard-body');
-  tbody.innerHTML = sorted.map((e, i) => {
-    const [name, company, tool, champ, url, scores] = e;
-    const rank = ranks[i];
-    const champAlive = CHAMP_STATUS[champ];
-    const champClass = champAlive ? 'champ-alive' : 'champ-dead';
-    const rankClass = rank <= 3 ? `rank-${rank}` : '';
-    return `<tr>
-      <td class="rank ${rankClass}">${rank}</td>
-      <td><div class="entry-name"><a href="${url}" target="_blank">${name}</a></div><div class="entry-tool">${tool}</div></td>
-      <td><span class="champ ${champClass}">${champ}</span></td>
-      <td class="pts pts-total">${scores[6]}</td>
-      <td class="pts-round round-cols">${scores[0]}</td>
-      <td class="pts-round round-cols">${scores[1]}</td>
-      <td class="pts-round round-cols">${scores[2]}</td>
-      <td class="pts-round round-cols">${scores[3]}</td>
-      <td class="pts-round round-cols">${scores[4]}</td>
-      <td class="pts-round round-cols">${scores[5]}</td>
-    </tr>`;
-  }).join('');
-
-  // Stats
-  const gamesPlayed = RESULTS.length;
-  document.getElementById('games-played').textContent = gamesPlayed;
-  document.getElementById('games-left').textContent = 67 - gamesPlayed;
-  document.getElementById('last-updated').textContent = LAST_UPDATED;
-
-  if (gamesPlayed > 0) {
-    document.getElementById('leader-name').textContent = sorted[0][0];
-    document.getElementById('leader-name').style.fontSize = '16px';
-    document.getElementById('status-text').textContent = `${gamesPlayed} of 67 games complete`;
-  }
-
-  // Results
-  if (RESULTS.length > 0) {
-    const list = document.getElementById('results-list');
-    list.innerHTML = RESULTS.slice().reverse().slice(0, 16).map(r => {
-      const [matchup, winner, loser, round, wseed, lseed] = r;
-      // Count how many entries picked the winner
-      const correctCount = countCorrectPicks(winner, matchup);
-      return `<div class="result-row">
-        <span class="result-winner"><span class="result-seed">(${wseed})</span>${winner}</span>
-        <span class="result-loser">def. <span class="result-seed">(${lseed})</span>${loser}</span>
-        <span class="result-round">${round}</span>
-        <span class="result-correct">${correctCount}/12 correct</span>
-      </div>`;
-    }).join('');
-  }
-}
-
-function countCorrectPicks(winner, matchup) {
-  // Placeholder - can be implemented with full pick data if desired
-  return '--';
-}
-
 let roundsVisible = false;
 function toggleRounds() {
   roundsVisible = !roundsVisible;
-  document.querySelectorAll('.round-cols').forEach(el => {
-    el.classList.toggle('show', roundsVisible);
-  });
+  document.querySelectorAll('.round-cols').forEach(el => el.classList.toggle('show', roundsVisible));
   document.querySelector('.toggle').textContent = roundsVisible ? 'Hide Round Breakdown' : 'Show Round Breakdown';
 }
-
-render();
 </script>
 </body>
 </html>
