@@ -333,6 +333,46 @@ GAMES = {
     "CHIP": ("Championship","CHIP"),
 }
 
+# Bracket structure data for interactive bracket view
+R64_MATCHUPS_JS = {
+    "E1": [["Duke",1],["Siena",16]], "E2": [["Ohio State",8],["TCU",9]],
+    "E3": [["St. John's",5],["Northern Iowa",12]], "E4": [["Kansas",4],["Cal Baptist",13]],
+    "E5": [["Louisville",6],["South Florida",11]], "E6": [["Michigan State",3],["North Dakota State",14]],
+    "E7": [["UCLA",7],["UCF",10]], "E8": [["UConn",2],["Furman",15]],
+    "S1": [["Florida",1],["_FF2",16]], "S2": [["Clemson",8],["Iowa",9]],
+    "S3": [["Vanderbilt",5],["McNeese",12]], "S4": [["Nebraska",4],["Troy",13]],
+    "S5": [["North Carolina",6],["VCU",11]], "S6": [["Illinois",3],["Penn",14]],
+    "S7": [["Saint Mary's",7],["Texas A&M",10]], "S8": [["Houston",2],["Idaho",15]],
+    "MW1": [["Michigan",1],["_FF1",16]], "MW2": [["Georgia",8],["Saint Louis",9]],
+    "MW3": [["Texas Tech",5],["Akron",12]], "MW4": [["Alabama",4],["Hofstra",13]],
+    "MW5": [["Tennessee",6],["_FF4",11]], "MW6": [["Virginia",3],["Wright State",14]],
+    "MW7": [["Kentucky",7],["Santa Clara",10]], "MW8": [["Iowa State",2],["Tennessee State",15]],
+    "W1": [["Arizona",1],["Long Island",16]], "W2": [["Villanova",8],["Utah State",9]],
+    "W3": [["Wisconsin",5],["High Point",12]], "W4": [["Arkansas",4],["Hawaii",13]],
+    "W5": [["BYU",6],["_FF3",11]], "W6": [["Gonzaga",3],["Kennesaw State",14]],
+    "W7": [["Miami (FL)",7],["Missouri",10]], "W8": [["Purdue",2],["Queens",15]],
+}
+
+FF_GAMES_JS = {
+    "FF1": [["UMBC",16],["Howard",16]], "FF2": [["Prairie View A&M",16],["Lehigh",16]],
+    "FF3": [["Texas",11],["NC State",11]], "FF4": [["Miami (OH)",11],["SMU",11]],
+}
+
+FEEDS_JS = {
+    "E9":["E1","E2"],"E10":["E3","E4"],"E11":["E5","E6"],"E12":["E7","E8"],
+    "S9":["S1","S2"],"S10":["S3","S4"],"S11":["S5","S6"],"S12":["S7","S8"],
+    "MW9":["MW1","MW2"],"MW10":["MW3","MW4"],"MW11":["MW5","MW6"],"MW12":["MW7","MW8"],
+    "W9":["W1","W2"],"W10":["W3","W4"],"W11":["W5","W6"],"W12":["W7","W8"],
+    "E13":["E9","E10"],"E14":["E11","E12"],
+    "S13":["S9","S10"],"S14":["S11","S12"],
+    "MW13":["MW9","MW10"],"MW14":["MW11","MW12"],
+    "W13":["W9","W10"],"W14":["W11","W12"],
+    "E15":["E13","E14"],"S15":["S13","S14"],
+    "MW15":["MW13","MW14"],"W15":["W13","W14"],
+    "FF_1":["E15","S15"],"FF_2":["MW15","W15"],
+    "CHIP":["FF_1","FF_2"],
+}
+
 # =====================================================
 # ESPN API - fetch tournament results
 # =====================================================
@@ -528,6 +568,214 @@ def get_eliminated_champs(results):
     return status
 
 
+def build_bracket_section(results):
+    """Build the interactive bracket modal HTML/CSS/JS."""
+    # Build seed map
+    seed_map = {}
+    for matchup in R64_MATCHUPS_JS.values():
+        for name, seed in matchup:
+            if not name.startswith('_'):
+                seed_map[name] = seed
+    for matchup in FF_GAMES_JS.values():
+        for name, seed in matchup:
+            seed_map[name] = seed
+
+    # Convert results for JS
+    js_results = {}
+    for gid, r in results.items():
+        js_results[gid] = {"winner": r["winner"], "loser": r["loser"]}
+
+    css = """<style>
+.modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.88);overflow-y:auto}
+.modal-content{background:var(--bg);margin:20px auto;max-width:1060px;border-radius:12px;border:1px solid var(--border)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border)}
+.modal-header h2{font-size:18px;font-weight:700}
+.modal-close{background:none;border:none;color:var(--text);font-size:28px;cursor:pointer;padding:0 4px;line-height:1}
+.modal-close:hover{color:var(--accent)}
+.region-tabs{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.region-tab{padding:10px 16px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;white-space:nowrap;border-bottom:2px solid transparent;font-weight:500}
+.region-tab:hover{color:var(--text)}
+.region-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.bracket-view{padding:16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.bracket-region{display:flex;gap:6px;min-height:480px}
+.round-col{display:flex;flex-direction:column;justify-content:space-around;min-width:130px;flex-shrink:0}
+.round-label{text-align:center;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:4px 0;margin-bottom:4px;font-weight:600}
+.bracket-game{border:1px solid var(--border);border-radius:4px;overflow:hidden;margin:2px 4px;background:var(--card)}
+.bracket-team{display:flex;padding:4px 8px;font-size:11px;gap:5px;align-items:center}
+.bracket-team+.bracket-team{border-top:1px solid var(--border)}
+.bracket-team.picked{font-weight:700;background:rgba(255,255,255,0.06)}
+.bracket-team.correct{background:rgba(77,216,138,0.15);color:var(--green)}
+.bracket-team.wrong{background:rgba(239,107,91,0.12);color:var(--red);text-decoration:line-through}
+.bracket-team.busted{opacity:0.35}
+.bracket-seed{color:var(--muted);min-width:16px;text-align:right;font-size:10px}
+.bracket-team.correct .bracket-seed{color:var(--green)}
+.bracket-team.wrong .bracket-seed{color:var(--red)}
+.bracket-champ-banner{text-align:center;padding:12px 20px;border-bottom:1px solid var(--border);font-size:13px;color:var(--muted)}
+.bracket-champ-banner strong{color:var(--accent);font-size:16px}
+.view-bracket{cursor:pointer}
+.view-bracket:hover{color:var(--accent) !important}
+.ff-label{text-align:center;font-size:11px;color:var(--muted);margin-bottom:2px;font-style:italic}
+</style>"""
+
+    modal_html = """
+<div id="bracket-modal" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h2 id="bracket-title">Bracket</h2>
+<button class="modal-close" onclick="closeBracket()">&times;</button>
+</div>
+<div id="bracket-champ-banner" class="bracket-champ-banner"></div>
+<div class="region-tabs">
+<button class="region-tab active" data-region="East" onclick="showRegion('East')">East</button>
+<button class="region-tab" data-region="South" onclick="showRegion('South')">South</button>
+<button class="region-tab" data-region="Midwest" onclick="showRegion('Midwest')">Midwest</button>
+<button class="region-tab" data-region="West" onclick="showRegion('West')">West</button>
+<button class="region-tab" data-region="FinalFour" onclick="showRegion('FinalFour')">Final Four</button>
+</div>
+<div class="bracket-view" id="bracket-view"></div>
+</div>
+</div>"""
+
+    # Build JS with data
+    js_data = "<script>\n"
+    js_data += "const ALL_PICKS = " + json.dumps(PICKS) + ";\n"
+    js_data += "const BRACKET_RESULTS = " + json.dumps(js_results) + ";\n"
+    js_data += "const SEED_MAP = " + json.dumps(seed_map) + ";\n"
+    js_data += "const R64_MATCHUPS = " + json.dumps(R64_MATCHUPS_JS) + ";\n"
+    js_data += "const FF_MATCHUPS = " + json.dumps(FF_GAMES_JS) + ";\n"
+    js_data += "const FEEDS = " + json.dumps(FEEDS_JS) + ";\n"
+    js_data += "const ENTRY_META_JS = " + json.dumps(ENTRY_META) + ";\n"
+
+    js_functions = r"""
+const REGIONS = {
+  East: {r64:["E1","E2","E3","E4","E5","E6","E7","E8"],r32:["E9","E10","E11","E12"],s16:["E13","E14"],e8:["E15"]},
+  South: {r64:["S1","S2","S3","S4","S5","S6","S7","S8"],r32:["S9","S10","S11","S12"],s16:["S13","S14"],e8:["S15"]},
+  Midwest: {r64:["MW1","MW2","MW3","MW4","MW5","MW6","MW7","MW8"],r32:["MW9","MW10","MW11","MW12"],s16:["MW13","MW14"],e8:["MW15"]},
+  West: {r64:["W1","W2","W3","W4","W5","W6","W7","W8"],r32:["W9","W10","W11","W12"],s16:["W13","W14"],e8:["W15"]}
+};
+let currentEntry = null, currentRegion = 'East';
+
+function openBracket(name) {
+  currentEntry = name;
+  currentRegion = 'East';
+  const meta = ENTRY_META_JS[name];
+  document.getElementById('bracket-title').innerHTML = name + ' <span style="font-size:12px;color:var(--muted);font-weight:400">via ' + meta.tool + '</span>';
+  document.getElementById('bracket-champ-banner').innerHTML = 'Champion Pick: <strong>' + meta.champ + '</strong>';
+  document.getElementById('bracket-modal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  renderBracket();
+  updateTabs();
+}
+function closeBracket() {
+  document.getElementById('bracket-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+function showRegion(r) { currentRegion = r; renderBracket(); updateTabs(); }
+function updateTabs() {
+  document.querySelectorAll('.region-tab').forEach(t => t.classList.toggle('active', t.dataset.region === currentRegion));
+}
+function isEliminated(team) {
+  for (const r of Object.values(BRACKET_RESULTS)) { if (r.loser === team) return true; }
+  return false;
+}
+function renderBracket() {
+  const v = document.getElementById('bracket-view');
+  v.innerHTML = currentRegion === 'FinalFour' ? renderFinalFour() : renderRegion(currentRegion);
+}
+function renderRegion(region) {
+  const picks = ALL_PICKS[currentEntry];
+  const reg = REGIONS[region];
+  const roundNames = ['R64','R32','Sweet 16','Elite 8','Winner'];
+  let html = '<div class="bracket-region">';
+
+  // R64
+  html += '<div class="round-col"><div class="round-label">R64</div>';
+  for (const gid of reg.r64) {
+    let teams = R64_MATCHUPS[gid].map(t => [t[0], t[1]]);
+    for (let i = 0; i < 2; i++) {
+      if (teams[i][0].startsWith('_')) {
+        const ffId = teams[i][0].substring(1);
+        teams[i][0] = picks[ffId];
+      }
+    }
+    html += renderGame(teams, picks[gid], BRACKET_RESULTS[gid]);
+  }
+  html += '</div>';
+
+  // R32, S16, E8
+  const laterRounds = [
+    {ids: reg.r32, label: 'R32'},
+    {ids: reg.s16, label: 'Sweet 16'},
+    {ids: reg.e8, label: 'Elite 8'}
+  ];
+  for (const round of laterRounds) {
+    html += '<div class="round-col"><div class="round-label">' + round.label + '</div>';
+    for (const gid of round.ids) {
+      const [f1, f2] = FEEDS[gid];
+      const t1 = picks[f1], t2 = picks[f2];
+      html += renderGame([[t1, SEED_MAP[t1]||''], [t2, SEED_MAP[t2]||'']], picks[gid], BRACKET_RESULTS[gid]);
+    }
+    html += '</div>';
+  }
+
+  // Winner column
+  html += '<div class="round-col"><div class="round-label">Winner</div>';
+  const winner = picks[reg.e8[0]];
+  html += '<div class="bracket-game"><div class="bracket-team picked" style="padding:6px 8px"><span class="bracket-seed">' + (SEED_MAP[winner]||'') + '</span><span>' + winner + '</span></div></div>';
+  html += '</div></div>';
+  return html;
+}
+function renderFinalFour() {
+  const picks = ALL_PICKS[currentEntry];
+  let html = '<div class="bracket-region" style="min-height:200px">';
+
+  // FF column
+  html += '<div class="round-col"><div class="round-label">Final Four</div>';
+  html += '<div class="ff-label">East vs South</div>';
+  const e = picks['E15'], s = picks['S15'];
+  html += renderGame([[e, SEED_MAP[e]||''], [s, SEED_MAP[s]||'']], picks['FF_1'], BRACKET_RESULTS['FF_1']);
+  html += '<div class="ff-label" style="margin-top:12px">Midwest vs West</div>';
+  const mw = picks['MW15'], w = picks['W15'];
+  html += renderGame([[mw, SEED_MAP[mw]||''], [w, SEED_MAP[w]||'']], picks['FF_2'], BRACKET_RESULTS['FF_2']);
+  html += '</div>';
+
+  // Championship
+  html += '<div class="round-col"><div class="round-label">Championship</div>';
+  const f1 = picks['FF_1'], f2 = picks['FF_2'];
+  html += renderGame([[f1, SEED_MAP[f1]||''], [f2, SEED_MAP[f2]||'']], picks['CHIP'], BRACKET_RESULTS['CHIP']);
+  html += '</div>';
+
+  // Champion
+  html += '<div class="round-col"><div class="round-label">Champion</div>';
+  const champ = picks['CHIP'];
+  html += '<div class="bracket-game"><div class="bracket-team picked" style="font-size:14px;padding:10px 12px"><span class="bracket-seed">' + (SEED_MAP[champ]||'') + '</span><span>' + champ + '</span></div></div>';
+  html += '</div></div>';
+  return html;
+}
+function renderGame(teams, pick, result) {
+  let html = '<div class="bracket-game">';
+  for (const [team, seed] of teams) {
+    let cls = 'bracket-team';
+    if (team === pick) {
+      cls += ' picked';
+      if (result) {
+        cls += result.winner === team ? ' correct' : ' wrong';
+      } else if (isEliminated(team)) {
+        cls += ' busted';
+      }
+    }
+    html += '<div class="' + cls + '"><span class="bracket-seed">' + seed + '</span><span>' + team + '</span></div>';
+  }
+  html += '</div>';
+  return html;
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeBracket(); });
+document.getElementById('bracket-modal').addEventListener('click', function(e) { if (e.target === e.currentTarget) closeBracket(); });
+"""
+
+    return css + modal_html + js_data + js_functions + "\n</script>"
+
+
 # =====================================================
 # HTML GENERATION
 # =====================================================
@@ -569,9 +817,10 @@ def build_html(scores, results, champ_status):
         alive = champ_status.get(champ, True)
         champ_class = "champ-alive" if alive else "champ-dead"
         rank_class = f"rank-{rank}" if rank <= 3 else ""
+        safe_name = name.replace("'", "\\'")
         rows_html += f'''<tr>
       <td class="rank {rank_class}">{rank}</td>
-      <td><div class="entry-name"><a href="{meta['url']}" target="_blank">{name}</a></div><div class="entry-tool">{meta['tool']}</div></td>
+      <td><div class="entry-name"><a href="#" class="view-bracket" onclick="openBracket('{safe_name}'); return false;">{name}</a></div><div class="entry-tool"><a href="{meta['url']}" target="_blank" style="color:var(--muted);text-decoration:none">{meta['tool']}</a></div></td>
       <td><span class="champ {champ_class}">{champ}</span></td>
       <td class="pts pts-total">{s[6]}</td>
       <td class="pts-round round-cols">{s[0]}</td>
@@ -586,7 +835,7 @@ def build_html(scores, results, champ_status):
     leader_style = 'style="font-size:16px"' if games_played > 0 else ""
     status_text = f"{games_played} of 67 games complete" if games_played > 0 else "Tournament starts March 19"
 
-    return HTML_TEMPLATE.format(
+    html = HTML_TEMPLATE.format(
         last_updated=now,
         games_played=games_played,
         games_left=games_left,
@@ -596,6 +845,10 @@ def build_html(scores, results, champ_status):
         leaderboard_rows=rows_html,
         results_html=results_html,
     )
+
+    bracket_section = build_bracket_section(results)
+    html = html.replace('<!-- BRACKET_SECTION -->', bracket_section)
+    return html
 
 
 HTML_TEMPLATE = """<!DOCTYPE html>
@@ -738,6 +991,7 @@ function toggleRounds() {{
   document.querySelector('.toggle').textContent = roundsVisible ? 'Hide Round Breakdown' : 'Show Round Breakdown';
 }}
 </script>
+<!-- BRACKET_SECTION -->
 </body>
 </html>"""
 
