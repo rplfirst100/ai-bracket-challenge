@@ -606,14 +606,14 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <title>Vet AI Bracket Challenge 2026</title>
 <style>
   :root {{
-    --bg: #0f1117;
-    --card: #1a1d27;
-    --border: #2a2d3a;
-    --text: #e4e4e7;
-    --muted: #8b8d97;
-    --accent: #f59e0b;
-    --green: #22c55e;
-    --red: #ef4444;
+    --bg: #faf9f6;
+    --card: #ffffff;
+    --border: #e5e2dc;
+    --text: #2d2a26;
+    --muted: #7a756d;
+    --accent: #e87c1e;
+    --green: #2a9d5c;
+    --red: #d44a3a;
     --blue: #3b82f6;
   }}
   * {{ margin: 0; padding: 0; box-sizing: border-box; }}
@@ -646,10 +646,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   thead th.num {{ text-align: center; }}
   tbody td {{ padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; }}
   tbody tr:last-child td {{ border-bottom: none; }}
-  tbody tr:hover {{ background: rgba(255,255,255,0.02); }}
+  tbody tr:hover {{ background: rgba(0,0,0,0.02); }}
   .rank {{ font-weight: 700; color: var(--muted); width: 36px; text-align: center; }}
   .rank-1 {{ color: var(--accent); }}
-  .rank-2 {{ color: #c0c0c0; }}
+  .rank-2 {{ color: #8a8a8a; }}
   .rank-3 {{ color: #cd7f32; }}
   .entry-name {{ font-weight: 600; }}
   .entry-name a {{ color: var(--text); text-decoration: none; }}
