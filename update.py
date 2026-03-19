@@ -268,7 +268,7 @@ PICKS = {
 }
 
 ENTRY_META = {
-    "The Bird Bath":   {"tool": "Claude", "champ": "Arizona", "url": "https://first100.io"},
+    "The Bird Bath":   {"tool": "Claude", "champ": "Arizona", "url": "https://thebirdbath.io"},
     "Open Vet":        {"tool": "Open Vet AI", "champ": "Duke", "url": "https://openvet.ai"},
     "Talkatoo":        {"tool": "Talkatoo", "champ": "Houston", "url": "https://talkatoo.com"},
     "PrimVeterinary":  {"tool": "PrimVeterinary AI", "champ": "UConn", "url": "https://primveterinary.com"},
@@ -688,7 +688,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <div class="container">
 <div class="header">
   <img src="header.png" alt="The Bird Bath presents: Veterinary AI Bracket Challenge" class="header-img">
-  <div class="sub">12 vet AI companies. 67 games. One bracket to rule them all.<br>A <a href="https://thebirdbathvet.substack.com" target="_blank">Bird Bath</a> production.</div>
+  <div class="sub">12 vet AI companies. 67 games. One bracket to rule them all.<br>A <a href="https://thebirdbath.io" target="_blank">Bird Bath</a> production.</div>
   <div class="badge"><span class="live">&#9679;</span> {status_text}</div>
 </div>
 <div class="stats">
@@ -727,7 +727,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   <div>{results_html}</div>
 </div>
 <div class="footer">
-  Updated {last_updated} &middot; <a href="https://thebirdbathvet.substack.com" target="_blank">The Bird Bath</a> &middot; <a href="https://first100.io" target="_blank">First 100</a>
+  Updated {last_updated} &middot; <a href="https://thebirdbath.io" target="_blank">The Bird Bath</a> &middot; <a href="https://first100.io" target="_blank">First 100</a>
 </div>
 </div>
 <script>
