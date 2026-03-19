@@ -1,0 +1,30 @@
+name: Update Leaderboard
+
+on:
+  schedule:
+    # Every 30 minutes during tournament hours (noon-midnight ET, March 17 - April 7)
+    - cron: '*/30 16-23,0-4 * 3-4 *'  # UTC offset for ET
+  workflow_dispatch: # Manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Fetch scores and rebuild leaderboard
+        run: python update.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --staged --quiet || git commit -m "Update leaderboard $(date -u '+%Y-%m-%d %H:%M UTC')" && git push
