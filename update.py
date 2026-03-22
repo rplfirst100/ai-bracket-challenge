@@ -484,7 +484,7 @@ def fetch_espn_results():
 
             if winner and loser:
                 # Try to match to a game ID
-                game_id = match_game(winner["name"], loser["name"])
+                game_id = match_game(winner["name"], loser["name"], results)
                 if game_id:
                     results[game_id] = {
                         "winner": winner["name"],
@@ -497,7 +497,7 @@ def fetch_espn_results():
     return results
 
 
-def match_game(winner, loser):
+def match_game(winner, loser, results):
     """Match a completed game to a game ID based on the teams involved."""
     teams = {winner, loser}
 
@@ -528,9 +528,17 @@ def match_game(winner, loser):
         if teams == gt or (len(gt) == 1 and gt.issubset(teams)):
             return gid
 
-    # For later rounds, check if both teams appear somewhere and we haven't matched yet
-    # This is handled by tracking which R64 winners feed into R32, etc.
-    # For simplicity, we'll match by checking if either team is a known participant
+    # For later rounds, resolve expected matchups from feeder game results
+    for gid, feeders in FEEDS_JS.items():
+        if gid in results:
+            continue  # already matched
+        expected_teams = set()
+        for feeder_id in feeders:
+            if feeder_id in results:
+                expected_teams.add(results[feeder_id]["winner"])
+        if len(expected_teams) == 2 and teams == expected_teams:
+            return gid
+
     return None
 
 
