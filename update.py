@@ -799,7 +799,7 @@ def build_html(scores, results, champ_status):
     results_html = ""
     if results:
         recent = sorted(results.items(), key=lambda x: list(GAMES.keys()).index(x[0]), reverse=True)
-        for game_id, r in recent[:16]:
+        for game_id, r in recent:
             correct_count = sum(1 for e in PICKS.values() if e.get(game_id) == r["winner"])
             rnd_short = {"First Four":"FF","Round of 64":"R64","Round of 32":"R32",
                          "Sweet 16":"S16","Elite 8":"E8","Final Four":"FF","Championship":"CHIP"}[r["round"]]
