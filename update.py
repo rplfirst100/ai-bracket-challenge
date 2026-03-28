@@ -393,19 +393,32 @@ NAME_MAP = {
     "North Dakota State Bison": "North Dakota State",
     "N. Dakota St": "North Dakota State",
     "Long Island University": "Long Island",
+    "Long Island University Sharks": "Long Island",
     "LIU": "Long Island",
     "LIU Sharks": "Long Island",
     "Kennesaw State Owls": "Kennesaw State",
     "Tennessee State Tigers": "Tennessee State",
     "Prairie View A&M": "Prairie View A&M",
+    "Prairie View A&M Panthers": "Prairie View A&M",
     "PV A&M": "Prairie View A&M",
     "Cal Baptist": "Cal Baptist",
     "California Baptist": "Cal Baptist",
     "Cal Baptist Lancers": "Cal Baptist",
+    "California Baptist Lancers": "Cal Baptist",
     "UCF Knights": "UCF",
     "VCU Rams": "VCU",
     "South Florida Bulls": "South Florida",
     "USF": "South Florida",
+    "Pennsylvania": "Penn",
+    "Pennsylvania Quakers": "Penn",
+    "Hawai'i": "Hawaii",
+    "Hawai'i Rainbow Warriors": "Hawaii",
+    "Hawaii Rainbow Warriors": "Hawaii",
+    "Lehigh Mountain Hawks": "Lehigh",
+    "Queens Royals": "Queens",
+    "Queens University": "Queens",
+    "SMU Mustangs": "SMU",
+    "Wright State Raiders": "Wright State",
 }
 
 def normalize_name(espn_name):
@@ -413,6 +426,7 @@ def normalize_name(espn_name):
     if espn_name in NAME_MAP:
         return NAME_MAP[espn_name]
     # Strip common suffixes
+    stripped = espn_name
     for suffix in [" Wildcats", " Blue Devils", " Buckeyes", " Horned Frogs",
                    " Red Storm", " Jayhawks", " Cardinals", " Bulls", " Spartans",
                    " Bison", " Bruins", " Huskies", " Gators", " Tigers",
@@ -426,8 +440,8 @@ def normalize_name(espn_name):
                    " Bobcats", " Thundering Herd", " Saints",
                    " Owls", " Knights", " Bears", " Terriers",
                    " Retrievers", " Lancers", " Sharks",
-                   " Paladins", " Kangaroos", " Royals",
-                   " Lumberjacks", " Wave", " Razorbacks",
+                   " Paladins", " Kangaroos", " Royals", " Mustangs",
+                   " Lumberjacks", " Wave", " Razorbacks", " Raiders",
                    " Rainbow Warriors", " Penguins", " Lions",
                    " Hoyas", " Hawks", " Highlanders", " Nittany Lions",
                    " Catamounts", " Musketeers", " Boilermakers",
@@ -438,10 +452,14 @@ def normalize_name(espn_name):
                    " Beavers", " Badgers", " Hoosiers", " Sooners",
                    " Peacocks", " Friars", " Red Foxes", " Flames",
                    " Tribe", " Monarchs", " Dukes", " Explorers",
-                   " Quakers", " Stags"]:
+                   " Quakers", " Stags", " Mountain Hawks"]:
         if espn_name.endswith(suffix):
-            return espn_name[:-len(suffix)]
-    return espn_name
+            stripped = espn_name[:-len(suffix)]
+            break
+    # Re-check NAME_MAP after stripping (e.g. "California Baptist Lancers" -> "California Baptist" -> "Cal Baptist")
+    if stripped in NAME_MAP:
+        return NAME_MAP[stripped]
+    return stripped
 
 
 def fetch_espn_results():
@@ -525,6 +543,8 @@ def match_game(winner, loser, results):
 
     # First try exact match for R64 / First Four games
     for gid, gt in game_teams.items():
+        if gid in results:
+            continue  # already matched, don't overwrite
         if teams == gt or (len(gt) == 1 and gt.issubset(teams)):
             return gid
 
